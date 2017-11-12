@@ -1,0 +1,80 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<!-- 	<div class="row top-menu">
+		<div class="col-md-10"></div>
+		<div class="col-md-2 text-right"></div>
+	</div> -->
+	<div class="row divider blue">
+		<div class="col-md-12"></div>
+	</div>
+	<div class="row banner main">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<h1>UC San Diego CSE Courses</h1>
+		</div>
+	</div>
+
+<div class = 'flash'>
+		      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+          
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+</div>
+  {% if 'username' in session %}
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-10 padding-none">
+			<a href="{{url_for('newCourseInstructor')}}">
+				<button class="btn btn-default" id="new-course">
+					<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>Add Instructor
+				</button>
+			</a>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	{% endif %}
+	<div class="container">
+
+        <div class="row">
+		    <div class="col-md-3">
+			{% for course in courses %}
+				<a href = "{{url_for('showCourse', course_name = course.name)}}">
+					<div class="row">
+						<div class="col-md-1"></div>
+							<div class="col-md-10 course-list">
+								<h3>{{course.name}}</h3>
+							</div>
+						<div class="col-md-1"></div>
+					</div>
+				</a>
+			{% endfor %}
+			</div>
+            <div class="col-md-9">
+                <h4 class="padding-bottom-19">Latest Items</h4>
+                {% for i in items %}
+                <div class="thumbnail">
+                    <a href = "{{url_for('showCourseInstructor', course_name = i.course.name, courseInstructor_name = i.name)}}">
+                        <h4>{{ i.name }}</h4>
+                        <h6 class="pull-right">Last update: {{ i.date.strftime("%-d-%b-%Y at %I:%M %p") }}</h6>
+                        <h6>({{ i.course.name }})</h6>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container -->
+
+
+
+{% endblock %}
