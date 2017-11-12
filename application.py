@@ -229,6 +229,8 @@ def showCourseInstructor(course_name,courseInstructor_name):
 #Create a new instructor item
 @app.route('/course/new/',methods=['GET','POST'])
 def newCourseInstructor():
+    if 'user_id' not in login_session:
+        return redirect(url_for('showLogin'))
     if request.method == 'POST':
         newItem = CourseInstructor(
             name = request.form['name'], 
@@ -254,6 +256,14 @@ def editCourseInstructor(course_name, courseInstructor_name):
     course = session.query(Course).filter_by(name = course_name).one()
     editedItem = session.query(CourseInstructor).\
         filter_by(course_id = course.id,name = courseInstructor_name).one()
+    creator = getUserInfo(editedItem.user_id)
+    # check user authentication
+    if 'user_id' not in login_session:
+        return redirect(url_for('showLogin'))
+    elif creator.id != login_session['user_id']:
+        flash ("You cannot edit this item. This item belongs to %s" % creator.name)
+        return redirect(url_for('showCourse', course_name = course_name))
+
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -272,12 +282,20 @@ def editCourseInstructor(course_name, courseInstructor_name):
 
 
 #Delete a instructor item
-@app.route('/restaurant/<path:course_name>/<path:courseInstructor_name>/delete',
+@app.route('/course/<path:course_name>/<path:courseInstructor_name>/delete',
      methods = ['GET','POST'])
 def deleteCourseInstructor(course_name,courseInstructor_name):
     course = session.query(Course).filter_by(name = course_name).one()
     itemToDelete = session.query(CourseInstructor).filter_by(course_id = 
-        course.id,name = courseInstructor_name).one()    
+        course.id,name = courseInstructor_name).one()  
+    creator = getUserInfo(itemToDelete.user_id)
+    # check user authentication
+    if 'user_id' not in login_session:
+        return redirect(url_for('showLogin'))
+    elif creator.id != login_session['user_id']:
+        flash ("You cannot delete this item. This item belongs to %s" % creator.name)
+        return redirect(url_for('showCourse', course_name = course_name))
+  
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
