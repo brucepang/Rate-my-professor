@@ -200,8 +200,10 @@ def showCourses():
 def showCourse(course_name):
     courses = session.query(Course).order_by(asc(Course.name))
     course = session.query(Course).filter_by(name = course_name).one()
-    items = session.query(CourseInstructor).filter_by(course_id = course.id).all()
-    return render_template('course.html', items = items, course = course,courses=courses)
+    items = session.query(CourseInstructor).\
+        filter_by(course_id = course.id).all()
+    return render_template('course.html', items = items, 
+        course = course,courses=courses)
      
 
 #show an instructor item
@@ -209,38 +211,45 @@ def showCourse(course_name):
 def showCourseInstructor(course_name,courseInstructor_name):
     courses = session.query(Course).order_by(asc(Course.name))
     course = session.query(Course).filter_by(name = course_name).one()
-    item = session.query(CourseInstructor).filter_by(course_id = course.id,name = courseInstructor_name).one()
+    item = session.query(CourseInstructor).filter_by(course_id = course.id,
+        name = courseInstructor_name).one()
     creator = getUserInfo(item.user_id)
     if 'user_id' not in login_session or creator.id != login_session['user_id']:
-        return render_template('publiccourseInstructor.html',course = course, item = item,courses=courses)
+        return render_template('publiccourseInstructor.html',course = course,
+         item = item,courses=courses)
     else:
-        return render_template('courseInstructor.html',course = course, item = item,courses=courses)
+        return render_template('courseInstructor.html',course = course, 
+            item = item,courses=courses)
 
 
 #Create a new instructor item
 @app.route('/course/new/',methods=['GET','POST'])
 def newCourseInstructor():
-  if request.method == 'POST':
-      newItem = CourseInstructor(
-        name = request.form['name'], 
-        date = datetime.datetime.now(),
-        description = request.form['description'], 
-        course = session.query(Course).filter_by(name = request.form['course']).one(),
-        user_id=login_session['user_id'])
-      session.add(newItem)
-      session.commit()
-      flash('New Menu %s Item Successfully Created' % (newItem.name))
-      return redirect(url_for('showCourse', course_name = request.form['course']))
-  else:
-      courses = session.query(Course).order_by(asc(Course.name))
-      return render_template('newCourseInstructor.html',courses=courses)
+    if request.method == 'POST':
+        newItem = CourseInstructor(
+            name = request.form['name'], 
+            date = datetime.datetime.now(),
+            description = request.form['description'], 
+            course = session.query(Course).\
+                filter_by(name = request.form['course']).one(),
+            user_id=login_session['user_id']
+        )
+        session.add(newItem)
+        session.commit()
+        flash('New Menu %s Item Successfully Created' % (newItem.name))
+        return redirect(url_for('showCourse', course_name = request.form['course']))
+    else:
+        courses = session.query(Course).order_by(asc(Course.name))
+        return render_template('newCourseInstructor.html',courses=courses)
 
 #Edit a instructor item
-@app.route('/course/<path:course_name>/<path:courseInstructor_name>/edit', methods=['GET','POST'])
+@app.route('/course/<path:course_name>/<path:courseInstructor_name>/edit', 
+    methods=['GET','POST'])
 def editCourseInstructor(course_name, courseInstructor_name):
     courses = session.query(Course).order_by(asc(Course.name))
     course = session.query(Course).filter_by(name = course_name).one()
-    editedItem = session.query(CourseInstructor).filter_by(course_id = course.id,name = courseInstructor_name).one()
+    editedItem = session.query(CourseInstructor).\
+        filter_by(course_id = course.id,name = courseInstructor_name).one()
     if request.method == 'POST':
         if request.form['name']:
             editedItem.name = request.form['name']
@@ -254,21 +263,25 @@ def editCourseInstructor(course_name, courseInstructor_name):
         flash('Course Instructor Successfully Edited')
         return redirect(url_for('showCourse', course_name = editedItem.course.name))
     else:
-        return render_template('editCourseInstructor.html', courses = courses, course = course, item = editedItem)
+        return render_template('editCourseInstructor.html', 
+            courses = courses, course = course, item = editedItem)
 
 
 #Delete a instructor item
-@app.route('/restaurant/<path:course_name>/<path:courseInstructor_name>/delete', methods = ['GET','POST'])
+@app.route('/restaurant/<path:course_name>/<path:courseInstructor_name>/delete',
+     methods = ['GET','POST'])
 def deleteCourseInstructor(course_name,courseInstructor_name):
     course = session.query(Course).filter_by(name = course_name).one()
-    itemToDelete = session.query(CourseInstructor).filter_by(course_id = course.id,name = courseInstructor_name).one()    
+    itemToDelete = session.query(CourseInstructor).filter_by(course_id = 
+        course.id,name = courseInstructor_name).one()    
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         flash('Course Instructor Successfully Deleted')
         return redirect(url_for('showCourse', course_name = course_name))
     else:
-        return render_template('deleteCourseInstructor.html', course = course, item = itemToDelete)
+        return render_template('deleteCourseInstructor.html', course = 
+            course, item = itemToDelete)
 
 
 @app.route('/catalog.json')
