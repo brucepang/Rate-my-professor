@@ -1,3 +1,7 @@
+# Author: Bo Pang
+# Date : Nov 12 2017
+# Help : skeleton code from Udacity github; Udacity forum; stackoverflow
+
 from flask import Flask, render_template, request, redirect,jsonify, url_for, flash
 import datetime
 from sqlalchemy import create_engine, asc
