@@ -21,21 +21,19 @@ Seperate instructions are provided to get GConnect working also.
 
 ## Dependencies
 - [Vagrant](https://www.vagrantup.com/)
-- [Udacity Vagrantfile](https://github.com/udacity/fullstack-nanodegree-vm)
-- [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+- Python Packages. Installed by using `./pg_config.sh`
 
 ## How to Install
-1. Install Vagrant & VirtualBox
+1. Install Vagrant
 2. Clone the Udacity Vagrantfile
 3. Go to Vagrant directory and either clone this repo or download and place zip here
 3. Launch the Vagrant VM (`vagrant up`)
 4. Log into Vagrant VM (`vagrant ssh`)
 5. Navigate to `cd/vagrant` as instructed in terminal
-6. The app imports requests which is not on this vm. Run sudo pip install requests
-7. Setup application database `python /item-catalog/database_setup.py`
-8. *Insert fake data `python /item-catalog/database_init.py`
-9. Run application using `python /item-catalog/app.py`
-10. Access the application locally using http://localhost:5000
+6. Setup application database `python /item-catalog/database_setup.py`
+7. *Insert fake data `python /item-catalog/lotsofinstructors.py`
+8. Run application using `python /item-catalog/application.py`
+9. Access the application locally using http://localhost:5000
 
 *Optional step(s)
 
@@ -58,16 +56,6 @@ To get the Google login working there are a few additional steps:
 14. Run application using `python /item-catalog/app.py`
 
 ## JSON Endpoints
-The following are open to the public:
 
-Catalog JSON: `/catalog/JSON`
+Catalog JSON: `/catalog.json`
     - Displays the whole catalog. Categories and all items.
-
-Categories JSON: `/catalog/categories/JSON`
-    - Displays all categories
-
-Category Items JSON: `/catalog/<path:category_name>/items/JSON`
-    - Displays items for a specific category
-
-Category Item JSON: `/catalog/<path:category_name>/<path:item_name>/JSON`
-    - Displays a specific category item.
