@@ -116,48 +116,5 @@ h3 {
 .banner h1 {
 	margin: 45px 0;
 }
- .course-list {
- 	background-color: #F0F0F0;
- 	padding: 20px;
-u }
- .course-list:hover {
- 	background-color: #e1e17f;
- 	padding: 20px;
-}
-.menu-item {
-	background: #F0F0F0;
-	padding: 20px;
-	margin: 20px;
-	margin-left: -20px;
-}
-.menu-price {
-	font-weight: 700;
-}
-.creator {
-	padding-right: 20px;
-	margin-top: -20px;
-	text-align: right;
-	float:right;
-}
-.creator img {
-	width: 100px;
-	border-radius: 50%;
-}
-.creator figcaption {
-	font-size: 14px;
-	color: #7B7573;
-	font-weight: 400;
-	margin-top: -20px;
-}
-.flash {
-	background-color: #98FB98;
-	width:100%;
-	text-decoration: none;
 
-}
 
-.flash li {
-	list-style-type: none;
-	text-align: center;
-
-}
